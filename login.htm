@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register Page</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="image-section">
+            <img src="https://wallup.net/wp-content/uploads/2016/03/10/318375-nature-landscape-lake-mountain-forest-wildflowers-spring-pine_trees-path-Switzerland-HDR.jpg" alt="Background Image">
+        </div>
+        <div class="login-section">
+            <h4>Welcome back</h4>
+            <h2>Login to your account</h2>
+            <form id="loginForm">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+                
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+                
+                <div class="options">
+                    <label><input type="checkbox"> Remember me</label>
+                    <a href="#">Forgot password?</a>
+                </div>
+                
+                <button type="submit">Login now</button>
+                <button type="button" class="google-login">
+                    <i class="fa-brands fa-google"></i>
+                    Or sign in with Google
+                </button>
+                <p id="error-message" style="color: red; display: none;"></p>
+            </form>
+            <p>Don't have an account? <a href="#" onclick="toggleForm()">Join free today</a></p>
+        </div>
+        
+        <div class="register-section" style="display: none;">
+            <h4>Create Account</h4>
+            <h2>Register here</h2>
+            <form id="registerForm">
+                <label for="reg-email">Email</label>
+                <input type="email" id="reg-email" placeholder="Enter your email" required>
+                
+                <label for="reg-password">Password</label>
+                <input type="password" id="reg-password" placeholder="Enter your password" required>
+                
+                <button type="submit">Register now</button>
+                <p id="reg-message" style="color: red; display: none;"></p>
+            </form>
+            <p>Already have an account? <a href="#" onclick="toggleForm()">Login here</a></p>
+        </div>
+    </div>
+
+    <script>
+        function toggleForm() {
+            document.querySelector(".login-section").style.display = 
+                document.querySelector(".login-section").style.display === "none" ? "block" : "none";
+            document.querySelector(".register-section").style.display = 
+                document.querySelector(".register-section").style.display === "none" ? "block" : "none";
+        }
+
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var errorMessage = document.getElementById("error-message");
+            
+            var storedEmail = localStorage.getItem("email");
+            var storedPassword = localStorage.getItem("password");
+            
+            if (email === "sankey901@solutions.com" && password === "mindset") {
+                localStorage.setItem("loggedInUser", "Sankey");
+                window.location.href = "welcome.html";
+            } else if (email === storedEmail && password === storedPassword) {
+                localStorage.setItem("loggedInUser", email);
+                window.location.href = "welcome.html";
+            } else if (email !== storedEmail) {
+                errorMessage.textContent = "Invalid username/email";
+                errorMessage.style.display = "block";
+            } else {
+                errorMessage.textContent = "Invalid password";
+                errorMessage.style.display = "block";
+            }
+        });
+
+        document.getElementById("registerForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var regEmail = document.getElementById("reg-email").value;
+            var regPassword = document.getElementById("reg-password").value;
+            var regMessage = document.getElementById("reg-message");
+            
+            if (regEmail && regPassword) {
+                localStorage.setItem("email", regEmail);
+                localStorage.setItem("password", regPassword);
+                regMessage.textContent = "Registration successful! You can now log in.";
+                regMessage.style.color = "green";
+                regMessage.style.display = "block";
+            } else {
+                regMessage.textContent = "Please fill in all fields.";
+                regMessage.style.display = "block";
+            }
+        });
+
+        window.onload = function() {
+            if (localStorage.getItem("loggedInUser")) {
+                window.location.href = "./welcome.htm";
+            }
+        };
+    </script>
+</body>
+</html>
